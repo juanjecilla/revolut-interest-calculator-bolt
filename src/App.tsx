@@ -1,12 +1,13 @@
-import React, { useState, useMemo } from 'react';
-import { TrendingUp, Calculator, Crown, Star, Zap, Shield } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { TrendingUp, Calculator, Crown, Star, Zap, Shield, Sun, Moon } from 'lucide-react';
 
 interface Plan {
   name: string;
   monthlyFee: number;
   interestRate: number;
   icon: React.ReactNode;
-  color: string;
+  gradient: string;
+  accentColor: string;
   description: string;
 }
 
@@ -16,7 +17,8 @@ const plans: Plan[] = [
     monthlyFee: 0,
     interestRate: 1.25,
     icon: <Shield className="w-6 h-6" />,
-    color: 'from-gray-400 to-gray-600',
+    gradient: 'from-[#6B7280] to-[#9CA3AF]',
+    accentColor: '#6B7280',
     description: 'Free plan'
   },
   {
@@ -24,7 +26,8 @@ const plans: Plan[] = [
     monthlyFee: 3.99,
     interestRate: 1.25,
     icon: <Star className="w-6 h-6" />,
-    color: 'from-blue-400 to-blue-600',
+    gradient: 'from-[#0075EB] to-[#00B9FF]',
+    accentColor: '#0075EB',
     description: 'Basic premium'
   },
   {
@@ -32,7 +35,8 @@ const plans: Plan[] = [
     monthlyFee: 8.99,
     interestRate: 1.51,
     icon: <TrendingUp className="w-6 h-6" />,
-    color: 'from-purple-400 to-purple-600',
+    gradient: 'from-[#00B9FF] to-[#00D4AA]',
+    accentColor: '#00B9FF',
     description: 'Enhanced returns'
   },
   {
@@ -40,7 +44,8 @@ const plans: Plan[] = [
     monthlyFee: 15.99,
     interestRate: 2.02,
     icon: <Crown className="w-6 h-6" />,
-    color: 'from-yellow-400 to-orange-500',
+    gradient: 'from-[#191C1F] to-[#3D4247]',
+    accentColor: '#191C1F',
     description: 'Premium experience'
   },
   {
@@ -48,7 +53,8 @@ const plans: Plan[] = [
     monthlyFee: 45,
     interestRate: 2.27,
     icon: <Zap className="w-6 h-6" />,
-    color: 'from-pink-400 to-red-500',
+    gradient: 'from-[#FFB800] to-[#FF8C00]',
+    accentColor: '#FFB800',
     description: 'Ultimate rewards'
   }
 ];
@@ -60,70 +66,74 @@ function calculateNetProfit(amount: number, plan: Plan): number {
 }
 
 function findBestPlan(amount: number): Plan {
-  return plans.reduce((best, current) => 
+  return plans.reduce((best, current) =>
     calculateNetProfit(amount, current) > calculateNetProfit(amount, best) ? current : best
   );
 }
 
-function PlanCard({ plan, amount, isBest }: { plan: Plan; amount: number; isBest: boolean }) {
+function PlanCard({ plan, amount, isBest, dark }: { plan: Plan; amount: number; isBest: boolean; dark: boolean }) {
   const grossEarnings = (amount * plan.interestRate) / 100;
   const annualFee = plan.monthlyFee * 12;
   const netProfit = grossEarnings - annualFee;
 
   return (
-    <div className={`relative p-6 rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 ${
-      isBest 
-        ? 'bg-white ring-4 ring-blue-400 ring-opacity-50 shadow-2xl' 
-        : 'bg-white hover:shadow-xl'
+    <div className={`relative p-6 rounded-2xl shadow-md transition-all duration-300 transform hover:scale-105 border ${
+      isBest
+        ? dark
+          ? 'bg-[#1E2328] border-[#0075EB] ring-2 ring-[#0075EB]/40 shadow-xl shadow-[#0075EB]/10'
+          : 'bg-white border-[#0075EB] ring-2 ring-[#0075EB]/30 shadow-xl shadow-[#0075EB]/10'
+        : dark
+          ? 'bg-[#1E2328] border-[#2A2F35] hover:shadow-lg hover:shadow-black/20'
+          : 'bg-white border-gray-100 hover:shadow-lg'
     }`}>
       {isBest && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+          <div className="bg-[#0075EB] text-white px-4 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">
             Best Choice
           </div>
         </div>
       )}
-      
-      <div className="flex items-center space-x-3 mb-4">
-        <div className={`p-3 rounded-xl bg-gradient-to-r ${plan.color} text-white`}>
+
+      <div className="flex items-center space-x-3 mb-5">
+        <div className={`p-3 rounded-xl bg-gradient-to-br ${plan.gradient} text-white shadow-sm`}>
           {plan.icon}
         </div>
         <div>
-          <h3 className="text-lg font-bold text-gray-900">{plan.name}</h3>
-          <p className="text-sm text-gray-500">{plan.description}</p>
+          <h3 className={`text-lg font-bold ${dark ? 'text-white' : 'text-[#191C1F]'}`}>{plan.name}</h3>
+          <p className={`text-xs ${dark ? 'text-[#8B9099]' : 'text-[#6B7280]'}`}>{plan.description}</p>
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         <div className="flex justify-between items-center">
-          <span className="text-gray-600">Monthly Fee</span>
-          <span className="font-semibold">
+          <span className={`text-sm ${dark ? 'text-[#8B9099]' : 'text-[#6B7280]'}`}>Monthly Fee</span>
+          <span className={`text-sm font-semibold ${dark ? 'text-[#C8CDD3]' : 'text-[#191C1F]'}`}>
             {plan.monthlyFee === 0 ? 'Free' : `€${plan.monthlyFee.toFixed(2)}`}
           </span>
         </div>
-        
+
         <div className="flex justify-between items-center">
-          <span className="text-gray-600">Interest Rate</span>
-          <span className="font-semibold">{plan.interestRate}%</span>
+          <span className={`text-sm ${dark ? 'text-[#8B9099]' : 'text-[#6B7280]'}`}>Interest Rate</span>
+          <span className={`text-sm font-semibold ${dark ? 'text-[#C8CDD3]' : 'text-[#191C1F]'}`}>{plan.interestRate}%</span>
         </div>
-        
+
         <div className="flex justify-between items-center">
-          <span className="text-gray-600">Annual Fee</span>
-          <span className="font-semibold">
+          <span className={`text-sm ${dark ? 'text-[#8B9099]' : 'text-[#6B7280]'}`}>Annual Fee</span>
+          <span className={`text-sm font-semibold ${dark ? 'text-[#C8CDD3]' : 'text-[#191C1F]'}`}>
             {annualFee === 0 ? 'Free' : `€${annualFee.toFixed(2)}`}
           </span>
         </div>
-        
-        <hr className="my-3" />
-        
+
+        <hr className={`my-2 ${dark ? 'border-[#2A2F35]' : 'border-gray-100'}`} />
+
         <div className="flex justify-between items-center">
-          <span className="text-gray-600">Gross Earnings</span>
-          <span className="font-semibold text-green-600">€{grossEarnings.toFixed(2)}</span>
+          <span className={`text-sm ${dark ? 'text-[#8B9099]' : 'text-[#6B7280]'}`}>Gross Earnings</span>
+          <span className="text-sm font-semibold text-[#00B9A9]">€{grossEarnings.toFixed(2)}</span>
         </div>
-        
+
         <div className="flex justify-between items-center">
-          <span className="text-gray-900 font-medium">Net Profit</span>
-          <span className={`font-bold text-lg ${netProfit >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+          <span className={`text-sm font-medium ${dark ? 'text-white' : 'text-[#191C1F]'}`}>Net Profit</span>
+          <span className={`font-bold text-lg ${netProfit >= 0 ? 'text-[#00B9A9]' : 'text-[#FF4B4B]'}`}>
             €{netProfit.toFixed(2)}
           </span>
         </div>
@@ -132,11 +142,13 @@ function PlanCard({ plan, amount, isBest }: { plan: Plan; amount: number; isBest
   );
 }
 
-function ComparisonChart({ amount }: { amount: number }) {
+const PLAN_COLORS = ['#6B7280', '#0075EB', '#00B9FF', '#555B63', '#FFB800'];
+
+function ComparisonChart({ amount, dark }: { amount: number; dark: boolean }) {
   const maxAmount = Math.max(amount * 1.5, 50000);
   const points = 100;
   const step = maxAmount / points;
-  
+
   const chartData = Array.from({ length: points }, (_, i) => {
     const x = i * step;
     return {
@@ -147,104 +159,160 @@ function ComparisonChart({ amount }: { amount: number }) {
 
   const maxProfit = Math.max(...chartData.map(d => Math.max(...d.profits)));
   const minProfit = Math.min(...chartData.map(d => Math.min(...d.profits)));
-  const profitRange = maxProfit - minProfit;
+  const profitRange = maxProfit - minProfit || 1;
 
   const svgHeight = 300;
-  const svgWidth = 800;
-  const padding = 40;
+  const svgWidth = 700;
+  const paddingLeft = 55;
+  const paddingRight = 20;
+  const paddingTop = 20;
+  const paddingBottom = 45;
 
   function getY(profit: number) {
-    return svgHeight - padding - ((profit - minProfit) / profitRange) * (svgHeight - 2 * padding);
+    return svgHeight - paddingBottom - ((profit - minProfit) / profitRange) * (svgHeight - paddingTop - paddingBottom);
   }
 
-  function getX(amount: number) {
-    return padding + (amount / maxAmount) * (svgWidth - 2 * padding);
+  function getX(amt: number) {
+    return paddingLeft + (amt / maxAmount) * (svgWidth - paddingLeft - paddingRight);
   }
+
+  const gridColor = dark ? '#2A2F35' : '#F1F5F9';
+  const axisColor = dark ? '#3D4247' : '#CBD5E1';
+  const labelColor = dark ? '#8B9099' : '#6B7280';
+
+  const yTicks = 5;
+  const yTickValues = Array.from({ length: yTicks }, (_, i) =>
+    minProfit + (i / (yTicks - 1)) * profitRange
+  );
+
+  const xTicks = 5;
+  const xTickValues = Array.from({ length: xTicks }, (_, i) =>
+    (i / (xTicks - 1)) * maxAmount
+  );
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-lg">
-      <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-        <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
+    <div className={`p-6 rounded-2xl shadow-md border ${dark ? 'bg-[#1E2328] border-[#2A2F35]' : 'bg-white border-gray-100'}`}>
+      <h3 className={`text-xl font-bold mb-2 flex items-center gap-2 ${dark ? 'text-white' : 'text-[#191C1F]'}`}>
+        <TrendingUp className="w-5 h-5 text-[#0075EB]" />
         Plan Comparison Chart
       </h3>
-      
+
+      {/* Legend above chart */}
+      <div className="flex flex-wrap gap-x-5 gap-y-2 mb-4">
+        {plans.map((plan, i) => (
+          <div key={plan.name} className="flex items-center gap-1.5">
+            <svg width="20" height="10" className="flex-shrink-0">
+              <line x1="0" y1="5" x2="20" y2="5" stroke={PLAN_COLORS[i]} strokeWidth="3" strokeLinecap="round" />
+            </svg>
+            <span className={`text-xs font-medium ${dark ? 'text-[#C8CDD3]' : 'text-[#374151]'}`}>{plan.name}</span>
+          </div>
+        ))}
+        <div className="flex items-center gap-1.5">
+          <svg width="20" height="10" className="flex-shrink-0">
+            <line x1="0" y1="5" x2="20" y2="5" stroke="#FF4B4B" strokeWidth="1.5" strokeDasharray="4,3" />
+          </svg>
+          <span className={`text-xs font-medium ${dark ? 'text-[#C8CDD3]' : 'text-[#374151]'}`}>Your amount</span>
+        </div>
+      </div>
+
       <div className="overflow-x-auto">
-        <svg width={svgWidth} height={svgHeight} className="w-full h-auto">
-          {/* Grid lines */}
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" strokeWidth="1"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-          
+        <svg width={svgWidth} height={svgHeight} className="w-full h-auto" viewBox={`0 0 ${svgWidth} ${svgHeight}`}>
+          {/* Horizontal grid lines */}
+          {yTickValues.map((val, i) => (
+            <g key={i}>
+              <line
+                x1={paddingLeft} y1={getY(val)}
+                x2={svgWidth - paddingRight} y2={getY(val)}
+                stroke={gridColor} strokeWidth="1"
+              />
+              <text
+                x={paddingLeft - 6} y={getY(val) + 4}
+                textAnchor="end" fontSize="10" fill={labelColor}
+              >
+                €{val >= 1000 ? `${(val / 1000).toFixed(1)}k` : val.toFixed(0)}
+              </text>
+            </g>
+          ))}
+
+          {/* Vertical grid lines */}
+          {xTickValues.map((val, i) => (
+            <g key={i}>
+              <line
+                x1={getX(val)} y1={paddingTop}
+                x2={getX(val)} y2={svgHeight - paddingBottom}
+                stroke={gridColor} strokeWidth="1"
+              />
+              <text
+                x={getX(val)} y={svgHeight - paddingBottom + 14}
+                textAnchor="middle" fontSize="10" fill={labelColor}
+              >
+                {val >= 1000 ? `€${(val / 1000).toFixed(0)}k` : `€${val.toFixed(0)}`}
+              </text>
+            </g>
+          ))}
+
           {/* Axes */}
-          <line x1={padding} y1={svgHeight - padding} x2={svgWidth - padding} y2={svgHeight - padding} 
-                stroke="#374151" strokeWidth="2" />
-          <line x1={padding} y1={padding} x2={padding} y2={svgHeight - padding} 
-                stroke="#374151" strokeWidth="2" />
-          
-          {/* Plot lines for each plan */}
+          <line x1={paddingLeft} y1={svgHeight - paddingBottom} x2={svgWidth - paddingRight} y2={svgHeight - paddingBottom}
+            stroke={axisColor} strokeWidth="1.5" />
+          <line x1={paddingLeft} y1={paddingTop} x2={paddingLeft} y2={svgHeight - paddingBottom}
+            stroke={axisColor} strokeWidth="1.5" />
+
+          {/* Plan lines */}
           {plans.map((plan, planIndex) => {
             const pathData = chartData.map((point, i) => {
               const x = getX(point.amount);
               const y = getY(point.profits[planIndex]);
               return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
             }).join(' ');
-            
-            const colors = ['#6b7280', '#3b82f6', '#8b5cf6', '#f59e0b', '#ec4899'];
-            
+
             return (
-              <g key={plan.name}>
-                <path
-                  d={pathData}
-                  fill="none"
-                  stroke={colors[planIndex]}
-                  strokeWidth="3"
-                  className="drop-shadow-sm"
-                />
-                {/* Legend */}
-                <g transform={`translate(${svgWidth - 150}, ${20 + planIndex * 25})`}>
-                  <line x1="0" y1="10" x2="20" y2="10" stroke={colors[planIndex]} strokeWidth="3" />
-                  <text x="25" y="14" className="text-sm font-medium" fill="#374151">{plan.name}</text>
-                </g>
-              </g>
+              <path
+                key={plan.name}
+                d={pathData}
+                fill="none"
+                stroke={PLAN_COLORS[planIndex]}
+                strokeWidth="2.5"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+              />
             );
           })}
-          
+
           {/* Current amount indicator */}
-          <line 
-            x1={getX(amount)} 
-            y1={padding} 
-            x2={getX(amount)} 
-            y2={svgHeight - padding}
-            stroke="#dc2626" 
-            strokeWidth="2" 
-            strokeDasharray="5,5"
+          <line
+            x1={getX(amount)} y1={paddingTop}
+            x2={getX(amount)} y2={svgHeight - paddingBottom}
+            stroke="#FF4B4B" strokeWidth="1.5" strokeDasharray="5,4"
           />
-          <circle 
-            cx={getX(amount)} 
+          <circle
+            cx={getX(amount)}
             cy={getY(calculateNetProfit(amount, findBestPlan(amount)))}
-            r="6" 
-            fill="#dc2626"
+            r="5"
+            fill="#FF4B4B"
+            stroke={dark ? '#1E2328' : 'white'}
+            strokeWidth="2"
           />
-          
+
           {/* Axis labels */}
-          <text x={svgWidth / 2} y={svgHeight - 10} textAnchor="middle" className="text-sm font-medium" fill="#374151">
+          <text
+            x={(paddingLeft + svgWidth - paddingRight) / 2}
+            y={svgHeight - 5}
+            textAnchor="middle" fontSize="11" fill={labelColor} fontWeight="500"
+          >
             Investment Amount (€)
           </text>
-          <text x="20" y={svgHeight / 2} textAnchor="middle" transform={`rotate(-90, 20, ${svgHeight / 2})`} 
-                className="text-sm font-medium" fill="#374151">
+          <text
+            x={12} y={(paddingTop + svgHeight - paddingBottom) / 2}
+            textAnchor="middle" fontSize="11" fill={labelColor} fontWeight="500"
+            transform={`rotate(-90, 12, ${(paddingTop + svgHeight - paddingBottom) / 2})`}
+          >
             Net Profit (€)
           </text>
         </svg>
       </div>
-      
-      <div className="mt-4 p-4 bg-gray-50 rounded-xl">
-        <p className="text-sm text-gray-600">
-          The red dashed line shows your current investment amount. The chart displays how net profit 
-          changes across different investment levels, helping you identify optimal plan switching points.
-        </p>
+
+      <div className={`mt-4 p-3 rounded-xl text-sm ${dark ? 'bg-[#13161A] text-[#8B9099]' : 'bg-[#F8FAFC] text-[#6B7280]'}`}>
+        The red dashed line marks your current investment amount. The dot shows the best plan's net profit at that level.
       </div>
     </div>
   );
@@ -252,6 +320,11 @@ function ComparisonChart({ amount }: { amount: number }) {
 
 function App() {
   const [amount, setAmount] = useState<number>(10000);
+  const [dark, setDark] = useState<boolean>(true);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+  }, [dark]);
 
   const bestPlan = useMemo(() => findBestPlan(amount), [amount]);
 
@@ -260,28 +333,61 @@ function App() {
     setAmount(Math.max(0, value));
   };
 
+  const bg = dark ? 'bg-[#13161A]' : 'bg-[#F4F6F9]';
+  const cardBg = dark ? 'bg-[#1E2328]' : 'bg-white';
+  const textPrimary = dark ? 'text-white' : 'text-[#191C1F]';
+  const textSecondary = dark ? 'text-[#8B9099]' : 'text-[#6B7280]';
+  const border = dark ? 'border-[#2A2F35]' : 'border-gray-200';
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-4">
-            <Calculator className="w-8 h-8 text-blue-600 mr-3" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Revolut Subscription Calculator
-            </h1>
+    <div className={`min-h-screen ${bg} transition-colors duration-300`}>
+      {/* Top bar */}
+      <div className={`sticky top-0 z-10 ${cardBg} border-b ${border} shadow-sm`}>
+        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <Calculator className="w-5 h-5 text-[#0075EB]" />
+            <span className={`font-bold text-base tracking-tight ${textPrimary}`}>
+              Revolut Calculator
+            </span>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Find the optimal Revolut plan based on your investment amount and maximize your returns
+          <button
+            onClick={() => setDark(d => !d)}
+            aria-label="Toggle theme"
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
+              dark
+                ? 'bg-[#2A2F35] border-[#3D4247] text-[#C8CDD3] hover:bg-[#3D4247]'
+                : 'bg-gray-100 border-gray-200 text-[#374151] hover:bg-gray-200'
+            }`}
+          >
+            {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {dark ? 'Light' : 'Dark'}
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-10">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className={`text-4xl font-extrabold tracking-tight mb-3 ${textPrimary}`}>
+            Revolut Subscription
+            <span className="text-[#0075EB]"> Calculator</span>
+          </h1>
+          <p className={`text-lg max-w-xl mx-auto ${textSecondary}`}>
+            Find the optimal Revolut plan for your savings and maximize your net returns.
           </p>
         </div>
 
         {/* Amount Input */}
-        <div className="max-w-md mx-auto mb-12">
-          <label htmlFor="amount" className="block text-sm font-semibold text-gray-700 mb-2">
-            Investment Amount (€)
+        <div className="max-w-sm mx-auto mb-10">
+          <label htmlFor="amount" className={`block text-sm font-semibold mb-2 ${textSecondary}`}>
+            Investment Amount
           </label>
-          <div className="relative">
+          <div className={`flex items-center rounded-xl border-2 transition-all duration-200 ${
+            dark
+              ? 'bg-[#1E2328] border-[#2A2F35] focus-within:border-[#0075EB]'
+              : 'bg-white border-gray-200 focus-within:border-[#0075EB]'
+          }`}>
+            <span className={`pl-4 text-xl font-bold select-none ${dark ? 'text-[#8B9099]' : 'text-[#6B7280]'}`}>€</span>
             <input
               id="amount"
               type="number"
@@ -289,68 +395,65 @@ function App() {
               onChange={handleAmountChange}
               min="0"
               step="100"
-              className="w-full px-6 py-4 text-2xl font-bold text-center rounded-2xl border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-20 transition-all duration-200"
+              className={`flex-1 px-3 py-4 text-2xl font-bold bg-transparent outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
+                dark ? 'text-white placeholder-[#3D4247]' : 'text-[#191C1F] placeholder-gray-300'
+              }`}
               placeholder="10000"
             />
-            <span className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl">
-              €
-            </span>
           </div>
         </div>
 
-        {/* Best Plan Highlight */}
-        <div className="max-w-4xl mx-auto mb-8">
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-2xl text-white text-center">
-            <Crown className="w-8 h-8 mx-auto mb-2" />
-            <h2 className="text-2xl font-bold mb-2">
-              Best Plan for €{amount.toLocaleString()}: {bestPlan.name}
-            </h2>
-            <p className="text-blue-100">
-              Net profit: €{calculateNetProfit(amount, bestPlan).toFixed(2)} annually
-            </p>
+        {/* Best Plan Banner */}
+        <div className="max-w-2xl mx-auto mb-8">
+          <div className="bg-[#0075EB] rounded-2xl p-5 text-white flex items-center gap-4 shadow-lg shadow-[#0075EB]/20">
+            <div className="p-2 bg-white/15 rounded-xl">
+              <Crown className="w-7 h-7" />
+            </div>
+            <div>
+              <p className="text-sm text-blue-100 font-medium uppercase tracking-wide">Best Plan for €{amount.toLocaleString()}</p>
+              <p className="text-2xl font-bold">{bestPlan.name}</p>
+              <p className="text-blue-100 text-sm">
+                Net profit: <span className="font-semibold text-white">€{calculateNetProfit(amount, bestPlan).toFixed(2)}</span> / year
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Plan Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 max-w-7xl mx-auto mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-10">
           {plans.map((plan) => (
             <PlanCard
               key={plan.name}
               plan={plan}
               amount={amount}
               isBest={plan.name === bestPlan.name}
+              dark={dark}
             />
           ))}
         </div>
 
         {/* Comparison Chart */}
-        <div className="max-w-6xl mx-auto mb-8">
-          <ComparisonChart amount={amount} />
+        <div className="mb-8">
+          <ComparisonChart amount={amount} dark={dark} />
         </div>
 
         {/* Footer */}
-        <div className="text-center text-gray-500 text-sm space-y-4">
-          {/* Ko-fi Support Button */}
+        <div className={`text-center space-y-4 ${textSecondary}`}>
           <div className="flex justify-center">
             <a
               href="https://ko-fi.com/juanjecilla"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-full hover:from-red-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center px-6 py-3 bg-[#FF5E5B] text-white font-semibold rounded-full hover:bg-[#e54e4b] transition-all duration-200 shadow-md hover:shadow-lg"
             >
-              <svg
-                className="w-5 h-5 mr-2"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.033 11.596c.049 4.271 3.468 4.669 3.468 4.669s11.723.083 15.628.083c3.905 0 4.371-2.773 4.371-2.773s.729-4.751.373-9.78z"/>
               </svg>
               Support this project on Ko-fi
             </a>
           </div>
-          <p>
-            This calculator helps you compare Revolut subscription plans based on interest earnings.
-            Interest rates and fees are subject to change. Please verify current rates with Revolut.
+          <p className="text-sm max-w-lg mx-auto">
+            Interest rates and fees are subject to change. Please verify current rates with Revolut directly.
           </p>
         </div>
       </div>
