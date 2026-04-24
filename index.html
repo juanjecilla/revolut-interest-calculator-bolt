@@ -2,9 +2,58 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Revolut Subscription Calculator</title>
+
+    <!--
+      Content Security Policy — static SPA, no external scripts/styles/fonts.
+      frame-ancestors is not enforceable via meta tag (requires HTTP header).
+      GitHub Pages does not support custom response headers.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';"
+    />
+
+    <title>Revolut Subscription Calculator — Find Your Best Plan</title>
+    <meta
+      name="description"
+      content="Compare all 5 Revolut subscription plans (Standard, Plus, Premium, Metal, Ultra) and find the one that maximises your annual interest returns based on your savings balance."
+    />
+    <meta name="author" content="Juanje Cilla" />
+    <meta
+      name="keywords"
+      content="Revolut, subscription calculator, interest calculator, savings, plan comparison"
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://juanjecilla.github.io/revolut-interest-calculator-bolt/"
+    />
+    <meta property="og:title" content="Revolut Subscription Calculator — Find Your Best Plan" />
+    <meta
+      property="og:description"
+      content="Compare all 5 Revolut plans and find the one that maximises your interest returns based on your savings balance."
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Revolut Subscription Calculator" />
+    <meta
+      name="twitter:description"
+      content="Find the optimal Revolut plan for your savings balance. Compare Standard, Plus, Premium, Metal, and Ultra."
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://juanjecilla.github.io/revolut-interest-calculator-bolt/"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="alternate icon" href="./favicon.ico" />
   </head>
   <body>
     <div id="root"></div>
