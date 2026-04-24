@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { TrendingUp, Calculator, Crown, Star, Zap, Shield, Sun, Moon } from 'lucide-react';
+import { TrendingUp, Calculator, Crown, Star, Zap, Shield, Sun, Moon, ExternalLink } from 'lucide-react';
 
 interface Plan {
   name: string;
@@ -372,9 +372,18 @@ function App() {
             Revolut Subscription
             <span className="text-[#0075EB]"> Calculator</span>
           </h1>
-          <p className={`text-lg max-w-xl mx-auto ${textSecondary}`}>
+          <p className={`text-lg max-w-xl mx-auto mb-4 ${textSecondary}`}>
             Find the optimal Revolut plan for your savings and maximize your net returns.
           </p>
+          <a
+            href="https://www.revolut.com/es-ES/our-pricing-plans/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-[#0075EB] font-medium hover:underline transition-all"
+          >
+            Ver información oficial de Revolut
+            <ExternalLink className="w-4 h-4" />
+          </a>
         </div>
 
         {/* Amount Input */}
