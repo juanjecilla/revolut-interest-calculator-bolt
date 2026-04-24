@@ -5,6 +5,7 @@ import { findBestPlan } from '@/utils/calculator';
 import { PlanCard } from '@/components/PlanCard';
 import { ComparisonChart } from '@/components/ComparisonChart';
 import { BestPlanBanner } from '@/components/BestPlanBanner';
+import { StaleRatesWarning } from '@/components/StaleRatesWarning';
 
 function App() {
   const [rawAmount, setRawAmount] = useState<string>('10000');
@@ -52,6 +53,8 @@ function App() {
             </span>
           </div>
         </div>
+
+        <StaleRatesWarning />
 
         <BestPlanBanner amount={amount} bestPlan={bestPlan} />
 
