@@ -8,11 +8,17 @@ const SVG_WIDTH = 800;
 const PADDING = 40;
 const CHART_POINTS = 100;
 
+const AXIS_COLOR_LIGHT = '#374151';
+const AXIS_COLOR_DARK = '#9ca3af';
+const GRID_COLOR_LIGHT = '#f1f5f9';
+const GRID_COLOR_DARK = '#1f2937';
+
 interface Props {
   amount: number;
+  dark?: boolean;
 }
 
-export function ComparisonChart({ amount }: Props) {
+export function ComparisonChart({ amount, dark = false }: Props) {
   const maxAmount = useMemo(() => Math.max(amount * 1.5, 50000), [amount]);
   const chartData = useMemo(() => generateChartData(maxAmount, CHART_POINTS, PLANS), [maxAmount]);
 
@@ -20,6 +26,9 @@ export function ComparisonChart({ amount }: Props) {
   const maxProfit = Math.max(...allProfits);
   const minProfit = Math.min(...allProfits);
   const profitRange = maxProfit - minProfit || 1;
+
+  const axisColor = dark ? AXIS_COLOR_DARK : AXIS_COLOR_LIGHT;
+  const gridColor = dark ? GRID_COLOR_DARK : GRID_COLOR_LIGHT;
 
   function getY(profit: number) {
     return SVG_HEIGHT - PADDING - ((profit - minProfit) / profitRange) * (SVG_HEIGHT - 2 * PADDING);
@@ -32,9 +41,9 @@ export function ComparisonChart({ amount }: Props) {
   const bestPlan = findBestPlan(amount, PLANS);
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-lg">
-      <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-        <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg transition-colors duration-300">
+      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+        <TrendingUp className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
         Plan Comparison Chart
       </h3>
 
@@ -52,7 +61,7 @@ export function ComparisonChart({ amount }: Props) {
 
           <defs>
             <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" strokeWidth="1" />
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke={gridColor} strokeWidth="1" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
@@ -62,7 +71,7 @@ export function ComparisonChart({ amount }: Props) {
             y1={SVG_HEIGHT - PADDING}
             x2={SVG_WIDTH - PADDING}
             y2={SVG_HEIGHT - PADDING}
-            stroke="#374151"
+            stroke={axisColor}
             strokeWidth="2"
           />
           <line
@@ -70,7 +79,7 @@ export function ComparisonChart({ amount }: Props) {
             y1={PADDING}
             x2={PADDING}
             y2={SVG_HEIGHT - PADDING}
-            stroke="#374151"
+            stroke={axisColor}
             strokeWidth="2"
           />
 
@@ -104,7 +113,7 @@ export function ComparisonChart({ amount }: Props) {
                     strokeWidth="3"
                     strokeDasharray={CHART_DASH_PATTERNS[planIndex]}
                   />
-                  <text x="25" y="14" fill="#374151" fontSize="12">
+                  <text x="25" y="14" fill={axisColor} fontSize="12">
                     {plan.name}
                   </text>
                 </g>
@@ -133,7 +142,7 @@ export function ComparisonChart({ amount }: Props) {
             x={SVG_WIDTH / 2}
             y={SVG_HEIGHT - 10}
             textAnchor="middle"
-            fill="#374151"
+            fill={axisColor}
             fontSize="12"
           >
             Investment Amount (€)
@@ -143,7 +152,7 @@ export function ComparisonChart({ amount }: Props) {
             y={SVG_HEIGHT / 2}
             textAnchor="middle"
             transform={`rotate(-90, 20, ${SVG_HEIGHT / 2})`}
-            fill="#374151"
+            fill={axisColor}
             fontSize="12"
           >
             Net Profit (€)
@@ -151,8 +160,8 @@ export function ComparisonChart({ amount }: Props) {
         </svg>
       </div>
 
-      <div className="mt-4 p-4 bg-gray-50 rounded-xl">
-        <p className="text-sm text-gray-600">
+      <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+        <p className="text-sm text-gray-600 dark:text-gray-300">
           The red dashed line shows your current investment amount. The chart displays how net
           profit changes across different investment levels, helping you identify optimal plan
           switching points.
