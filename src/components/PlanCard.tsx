@@ -14,6 +14,7 @@ export function PlanCard({ plan, amount, isBest }: Props) {
 
   return (
     <div
+      data-plan={plan.name}
       className={`relative p-6 rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 ${
         isBest
           ? 'bg-white dark:bg-gray-800 ring-4 ring-blue-400 ring-opacity-50 shadow-2xl'
