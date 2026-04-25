@@ -5,7 +5,8 @@ import App from './App';
 describe('App', () => {
   it('renders the page title', () => {
     render(<App />);
-    expect(screen.getByText(/Revolut Subscription Calculator/i)).toBeInTheDocument();
+    const h1 = screen.getByRole('heading', { level: 1 });
+    expect(h1.textContent).toMatch(/Revolut Subscription Calculator/i);
   });
 
   it('renders all 5 plan card headings', () => {

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Calculator } from 'lucide-react';
-import { PLANS, KOFI_URL } from '@/constants/plans';
+import { Calculator, ExternalLink } from 'lucide-react';
+import { PLANS, KOFI_URL, REVOLUT_PRICING_URL } from '@/constants/plans';
 import { findBestPlan } from '@/utils/calculator';
 import { PlanCard } from '@/components/PlanCard';
 import { ComparisonChart } from '@/components/ComparisonChart';
@@ -18,25 +18,41 @@ function App() {
   const bestPlan = useMemo(() => findBestPlan(amount, PLANS), [amount]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-4">
-            <Calculator className="w-8 h-8 text-blue-600 mr-3" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Revolut Subscription Calculator
-            </h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Find the optimal Revolut plan based on your investment amount and maximize your returns
+    <div className="min-h-screen bg-slate-50">
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center gap-2.5">
+          <Calculator className="w-5 h-5 text-[#0075EB]" />
+          <span className="font-bold text-base text-gray-900 tracking-tight">
+            Revolut Calculator
+          </span>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-3">
+            Revolut Subscription <span className="text-[#0075EB]">Calculator</span>
+          </h1>
+          <p className="text-lg text-gray-500 max-w-xl mx-auto mb-4">
+            Find the optimal Revolut plan for your savings and maximize your net returns.
           </p>
+          <a
+            href={REVOLUT_PRICING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-[#0075EB] text-sm font-medium hover:underline"
+          >
+            View official Revolut pricing
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
         </div>
 
-        <div className="max-w-md mx-auto mb-12">
-          <label htmlFor="amount" className="block text-sm font-semibold text-gray-700 mb-2">
-            Investment Amount (€)
+        <div className="max-w-sm mx-auto mb-10">
+          <label htmlFor="amount" className="block text-sm font-semibold text-gray-600 mb-2">
+            Investment Amount
           </label>
-          <div className="relative">
+          <div className="flex items-center rounded-xl border-2 border-gray-200 bg-white focus-within:border-[#0075EB] transition-colors duration-200">
+            <span className="pl-4 text-xl font-bold text-gray-400 select-none">€</span>
             <input
               id="amount"
               type="number"
@@ -44,18 +60,15 @@ function App() {
               onChange={(e) => setRawAmount(e.target.value)}
               min="0"
               step="100"
-              className="w-full px-6 py-4 text-2xl font-bold text-center rounded-2xl border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-20 transition-all duration-200"
+              className="flex-1 px-3 py-4 text-2xl font-bold bg-transparent outline-none text-gray-900 placeholder-gray-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               placeholder="10000"
             />
-            <span className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl">
-              €
-            </span>
           </div>
         </div>
 
         <BestPlanBanner amount={amount} bestPlan={bestPlan} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 max-w-7xl mx-auto mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-10">
           {PLANS.map((plan) => (
             <PlanCard
               key={plan.name}
@@ -66,7 +79,7 @@ function App() {
           ))}
         </div>
 
-        <div className="max-w-6xl mx-auto mb-8">
+        <div className="mb-8">
           <ComparisonChart amount={amount} />
         </div>
 
@@ -76,7 +89,7 @@ function App() {
               href={KOFI_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-full hover:from-red-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center px-6 py-3 bg-[#FF5E5B] text-white font-semibold rounded-full hover:bg-[#e54e4b] transition-colors duration-200 shadow-md hover:shadow-lg"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.033 11.596c.049 4.271 3.468 4.669 3.468 4.669s11.723.083 15.628.083c3.905 0 4.371-2.773 4.371-2.773s.729-4.751.373-9.78z" />
@@ -84,9 +97,9 @@ function App() {
               Support this project on Ko-fi
             </a>
           </div>
-          <p>
-            This calculator helps you compare Revolut subscription plans based on interest earnings.
-            Interest rates and fees are subject to change. Please verify current rates with Revolut.
+          <p className="max-w-lg mx-auto">
+            Interest rates and fees are subject to change. Please verify current rates with Revolut
+            directly.
           </p>
         </div>
       </div>
