@@ -9,8 +9,10 @@ import {
 } from '@/utils/calculator';
 
 const SVG_HEIGHT = 300;
-const SVG_WIDTH = 800;
-const PADDING = 40;
+const SVG_WIDTH = 760;
+const PADDING_LEFT = 40;
+const PADDING_RIGHT = 20;
+const PADDING_V = 40;
 const CHART_POINTS = 100;
 const TOOLTIP_FLIP_THRESHOLD = 60;
 
@@ -45,19 +47,21 @@ export function ComparisonChart({ amount, dark = false }: Props) {
   const gridColor = dark ? GRID_COLOR_DARK : GRID_COLOR_LIGHT;
 
   function getY(profit: number) {
-    return SVG_HEIGHT - PADDING - ((profit - minProfit) / profitRange) * (SVG_HEIGHT - 2 * PADDING);
+    return (
+      SVG_HEIGHT - PADDING_V - ((profit - minProfit) / profitRange) * (SVG_HEIGHT - 2 * PADDING_V)
+    );
   }
 
   function getX(amt: number) {
-    return PADDING + (amt / maxAmount) * (SVG_WIDTH - 2 * PADDING);
+    return PADDING_LEFT + (amt / maxAmount) * (SVG_WIDTH - PADDING_LEFT - PADDING_RIGHT);
   }
 
   function amountFromSvgX(svgX: number): number {
-    return ((svgX - PADDING) / (SVG_WIDTH - 2 * PADDING)) * maxAmount;
+    return ((svgX - PADDING_LEFT) / (SVG_WIDTH - PADDING_LEFT - PADDING_RIGHT)) * maxAmount;
   }
 
   function resolveTooltip(svgX: number) {
-    if (svgX < PADDING || svgX > SVG_WIDTH - PADDING) {
+    if (svgX < PADDING_LEFT || svgX > SVG_WIDTH - PADDING_RIGHT) {
       setTooltip(null);
       return;
     }
@@ -99,10 +103,9 @@ export function ComparisonChart({ amount, dark = false }: Props) {
         Plan Comparison Chart
       </h3>
 
-      <div className="overflow-x-auto relative">
+      <div className="relative">
         <svg
-          width={SVG_WIDTH}
-          height={SVG_HEIGHT}
+          viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
           className="w-full h-auto cursor-crosshair"
           role="img"
           aria-labelledby="chart-title"
@@ -124,18 +127,18 @@ export function ComparisonChart({ amount, dark = false }: Props) {
           <rect width="100%" height="100%" fill="url(#grid)" />
 
           <line
-            x1={PADDING}
-            y1={SVG_HEIGHT - PADDING}
-            x2={SVG_WIDTH - PADDING}
-            y2={SVG_HEIGHT - PADDING}
+            x1={PADDING_LEFT}
+            y1={SVG_HEIGHT - PADDING_V}
+            x2={SVG_WIDTH - PADDING_RIGHT}
+            y2={SVG_HEIGHT - PADDING_V}
             stroke={axisColor}
             strokeWidth="2"
           />
           <line
-            x1={PADDING}
-            y1={PADDING}
-            x2={PADDING}
-            y2={SVG_HEIGHT - PADDING}
+            x1={PADDING_LEFT}
+            y1={PADDING_V}
+            x2={PADDING_LEFT}
+            y2={SVG_HEIGHT - PADDING_V}
             stroke={axisColor}
             strokeWidth="2"
           />
@@ -150,40 +153,25 @@ export function ComparisonChart({ amount, dark = false }: Props) {
               .join(' ');
 
             return (
-              <g key={plan.name}>
-                <path
-                  d={pathData}
-                  fill="none"
-                  stroke={CHART_COLORS[planIndex]}
-                  strokeWidth="3"
-                  strokeDasharray={CHART_DASH_PATTERNS[planIndex]}
-                  aria-label={`${plan.name} plan net profit line`}
-                  className="drop-shadow-sm"
-                />
-                <g transform={`translate(${SVG_WIDTH - 150}, ${20 + planIndex * 25})`}>
-                  <line
-                    x1="0"
-                    y1="10"
-                    x2="20"
-                    y2="10"
-                    stroke={CHART_COLORS[planIndex]}
-                    strokeWidth="3"
-                    strokeDasharray={CHART_DASH_PATTERNS[planIndex]}
-                  />
-                  <text x="25" y="14" fill={axisColor} fontSize="12">
-                    {plan.name}
-                  </text>
-                </g>
-              </g>
+              <path
+                key={plan.name}
+                d={pathData}
+                fill="none"
+                stroke={CHART_COLORS[planIndex]}
+                strokeWidth="3"
+                strokeDasharray={CHART_DASH_PATTERNS[planIndex]}
+                aria-label={`${plan.name} plan net profit line`}
+                className="drop-shadow-sm"
+              />
             );
           })}
 
           {tooltip && (
             <line
               x1={tooltip.svgX}
-              y1={PADDING}
+              y1={PADDING_V}
               x2={tooltip.svgX}
-              y2={SVG_HEIGHT - PADDING}
+              y2={SVG_HEIGHT - PADDING_V}
               stroke="#6b7280"
               strokeWidth="1"
               strokeDasharray="4,2"
@@ -192,9 +180,9 @@ export function ComparisonChart({ amount, dark = false }: Props) {
 
           <line
             x1={getX(amount)}
-            y1={PADDING}
+            y1={PADDING_V}
             x2={getX(amount)}
-            y2={SVG_HEIGHT - PADDING}
+            y2={SVG_HEIGHT - PADDING_V}
             stroke="#dc2626"
             strokeWidth="2"
             strokeDasharray="5,5"
@@ -208,7 +196,7 @@ export function ComparisonChart({ amount, dark = false }: Props) {
           />
 
           <text
-            x={SVG_WIDTH / 2}
+            x={(PADDING_LEFT + SVG_WIDTH - PADDING_RIGHT) / 2}
             y={SVG_HEIGHT - 10}
             textAnchor="middle"
             fill={axisColor}
@@ -217,10 +205,10 @@ export function ComparisonChart({ amount, dark = false }: Props) {
             Investment Amount (€)
           </text>
           <text
-            x="20"
+            x="14"
             y={SVG_HEIGHT / 2}
             textAnchor="middle"
-            transform={`rotate(-90, 20, ${SVG_HEIGHT / 2})`}
+            transform={`rotate(-90, 14, ${SVG_HEIGHT / 2})`}
             fill={axisColor}
             fontSize="12"
           >
@@ -230,14 +218,14 @@ export function ComparisonChart({ amount, dark = false }: Props) {
 
         {tooltip && (
           <div
-            className="pointer-events-none absolute top-2 z-10 bg-white border border-gray-200 rounded-xl shadow-xl p-3 w-52 text-xs"
+            className="pointer-events-none absolute top-2 z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl p-3 w-52 text-xs"
             style={{
               left: tooltipOnRight ? undefined : `calc(${tooltipLeftPct}% + 8px)`,
               right: tooltipOnRight ? `calc(${100 - tooltipLeftPct}% + 8px)` : undefined,
             }}
             aria-live="polite"
           >
-            <p className="font-semibold text-gray-700 mb-2 border-b pb-1">
+            <p className="font-semibold text-gray-700 dark:text-gray-200 mb-2 border-b dark:border-gray-700 pb-1">
               €{Math.round(tooltip.amount).toLocaleString()}
             </p>
             {PLANS.map((plan, i) => (
@@ -247,7 +235,7 @@ export function ComparisonChart({ amount, dark = false }: Props) {
                     className="inline-block w-2.5 h-0.5"
                     style={{ background: CHART_COLORS[i] }}
                   />
-                  <span className="text-gray-600">{plan.name}</span>
+                  <span className="text-gray-600 dark:text-gray-400">{plan.name}</span>
                 </span>
                 <span
                   className={`font-semibold ${tooltip.profits[i] >= 0 ? 'text-green-600' : 'text-red-500'}`}
@@ -258,6 +246,43 @@ export function ComparisonChart({ amount, dark = false }: Props) {
             ))}
           </div>
         )}
+      </div>
+
+      <div
+        className="flex flex-wrap gap-3 mt-3 justify-center"
+        role="list"
+        aria-label="Chart legend"
+      >
+        {PLANS.map((plan, i) => (
+          <div key={plan.name} className="flex items-center gap-1.5" role="listitem">
+            <svg width="24" height="12" aria-hidden="true">
+              <line
+                x1="0"
+                y1="6"
+                x2="24"
+                y2="6"
+                stroke={CHART_COLORS[i]}
+                strokeWidth="3"
+                strokeDasharray={CHART_DASH_PATTERNS[i]}
+              />
+            </svg>
+            <span className="text-sm text-gray-700 dark:text-gray-300">{plan.name}</span>
+          </div>
+        ))}
+        <div className="flex items-center gap-1.5" role="listitem">
+          <svg width="24" height="12" aria-hidden="true">
+            <line
+              x1="0"
+              y1="6"
+              x2="24"
+              y2="6"
+              stroke="#dc2626"
+              strokeWidth="2"
+              strokeDasharray="5,5"
+            />
+          </svg>
+          <span className="text-sm text-gray-700 dark:text-gray-300">Your amount</span>
+        </div>
       </div>
 
       <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
