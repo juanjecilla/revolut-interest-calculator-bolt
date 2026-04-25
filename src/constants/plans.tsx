@@ -4,6 +4,12 @@ import type { Plan } from '@/types';
 export const KOFI_URL = 'https://ko-fi.com/juanjecilla';
 export const REVOLUT_PRICING_URL = 'https://www.revolut.com/pricing-plans/';
 
+/** ISO date when plan rates/fees were last verified against revolut.com */
+export const RATES_LAST_UPDATED = '2026-04-25';
+
+/** Show stale warning after this many days without a rates update */
+export const RATES_STALE_AFTER_DAYS = 90;
+
 export const CHART_COLORS = ['#6B7280', '#0075EB', '#00B9FF', '#555B63', '#FFB800'] as const;
 
 export const CHART_DASH_PATTERNS = ['none', '6,3', '4,4', '8,2,2,2', '2,2'] as const;
