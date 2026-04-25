@@ -6,12 +6,13 @@
 
     <!--
       Content Security Policy — static SPA, no external scripts/styles/fonts.
+      connect-src omitted: falls back to default-src 'self', which allows Vite HMR (SSE/WS).
       frame-ancestors is not enforceable via meta tag (requires HTTP header).
       GitHub Pages does not support custom response headers.
     -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none';"
     />
 
     <title>Revolut Subscription Calculator — Find Your Best Plan</title>
@@ -53,7 +54,6 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="alternate icon" href="./favicon.ico" />
   </head>
   <body>
     <div id="root"></div>
