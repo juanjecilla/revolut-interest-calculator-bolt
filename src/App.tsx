@@ -1,13 +1,15 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Calculator } from 'lucide-react';
 import { PLANS, KOFI_URL } from '@/constants/plans';
 import { findBestPlan } from '@/utils/calculator';
+import { useHashAmount } from '@/hooks/useHashAmount';
 import { PlanCard } from '@/components/PlanCard';
 import { ComparisonChart } from '@/components/ComparisonChart';
 import { BestPlanBanner } from '@/components/BestPlanBanner';
+import { CopyLinkButton } from '@/components/CopyLinkButton';
 
 function App() {
-  const [rawAmount, setRawAmount] = useState<string>('10000');
+  const { rawAmount, setRawAmount } = useHashAmount();
 
   const amount = useMemo(() => {
     const parsed = parseFloat(rawAmount);
@@ -50,6 +52,9 @@ function App() {
             <span className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl">
               €
             </span>
+          </div>
+          <div className="flex justify-center mt-3">
+            <CopyLinkButton />
           </div>
         </div>
 
