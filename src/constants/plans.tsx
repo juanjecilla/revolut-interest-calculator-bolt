@@ -4,7 +4,7 @@ import type { Plan } from '@/types';
 export const KOFI_URL = 'https://ko-fi.com/juanjecilla';
 
 /** ISO date when plan rates/fees were last verified against revolut.com */
-export const RATES_LAST_UPDATED = '2025-04-25';
+export const RATES_LAST_UPDATED = '2026-04-25';
 
 /** Show stale warning after this many days without a rates update */
 export const RATES_STALE_AFTER_DAYS = 90;
