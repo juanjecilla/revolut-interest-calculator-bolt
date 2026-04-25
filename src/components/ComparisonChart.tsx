@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { TrendingUp } from 'lucide-react';
 import { PLANS, CHART_COLORS, CHART_DASH_PATTERNS } from '@/constants/plans';
 import {
@@ -12,6 +12,7 @@ const SVG_HEIGHT = 300;
 const SVG_WIDTH = 800;
 const PADDING = 40;
 const CHART_POINTS = 100;
+const TOOLTIP_FLIP_THRESHOLD = 60;
 
 interface TooltipData {
   amount: number;
@@ -24,7 +25,6 @@ interface Props {
 }
 
 export function ComparisonChart({ amount }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<TooltipData | null>(null);
 
   const maxAmount = useMemo(() => Math.max(amount * 1.5, 50000), [amount]);
@@ -61,21 +61,27 @@ export function ComparisonChart({ amount }: Props) {
     setTooltip({ amount: point.amount, profits: point.profits, svgX });
   }
 
-  function handleMouseMove(e: React.MouseEvent<SVGSVGElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const scaleX = SVG_WIDTH / rect.width;
-    resolveTooltip((e.clientX - rect.left) * scaleX);
-  }
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<SVGSVGElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const scaleX = SVG_WIDTH / rect.width;
+      resolveTooltip((e.clientX - rect.left) * scaleX);
+    },
+    [chartData, maxAmount] // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
-  function handleTouchMove(e: React.TouchEvent<SVGSVGElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const scaleX = SVG_WIDTH / rect.width;
-    resolveTooltip((e.touches[0].clientX - rect.left) * scaleX);
-  }
+  const handleTouch = useCallback(
+    (e: React.TouchEvent<SVGSVGElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const scaleX = SVG_WIDTH / rect.width;
+      resolveTooltip((e.touches[0].clientX - rect.left) * scaleX);
+    },
+    [chartData, maxAmount] // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   const bestPlan = findBestPlan(amount, PLANS);
   const tooltipLeftPct = tooltip ? (tooltip.svgX / SVG_WIDTH) * 100 : 0;
-  const tooltipOnRight = tooltipLeftPct > 60;
+  const tooltipOnRight = tooltipLeftPct > TOOLTIP_FLIP_THRESHOLD;
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-lg">
@@ -84,7 +90,7 @@ export function ComparisonChart({ amount }: Props) {
         Plan Comparison Chart
       </h3>
 
-      <div ref={containerRef} className="overflow-x-auto relative">
+      <div className="overflow-x-auto relative">
         <svg
           width={SVG_WIDTH}
           height={SVG_HEIGHT}
@@ -93,7 +99,8 @@ export function ComparisonChart({ amount }: Props) {
           aria-labelledby="chart-title"
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setTooltip(null)}
-          onTouchMove={handleTouchMove}
+          onTouchStart={handleTouch}
+          onTouchMove={handleTouch}
           onTouchEnd={() => setTooltip(null)}
         >
           <title id="chart-title">
