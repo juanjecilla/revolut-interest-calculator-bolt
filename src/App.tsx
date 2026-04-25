@@ -9,6 +9,7 @@ import { ComparisonChart } from '@/components/ComparisonChart';
 import { BestPlanBanner } from '@/components/BestPlanBanner';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
 import { CopyLinkButton } from '@/components/CopyLinkButton';
+import { StaleRatesWarning } from '@/components/StaleRatesWarning';
 
 function App() {
   const { rawAmount, setRawAmount } = useHashAmount();
@@ -66,6 +67,8 @@ function App() {
             <CopyLinkButton />
           </div>
         </div>
+
+        <StaleRatesWarning />
 
         <BestPlanBanner amount={amount} bestPlan={bestPlan} />
 
