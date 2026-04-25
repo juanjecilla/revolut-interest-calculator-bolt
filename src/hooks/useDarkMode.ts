@@ -41,5 +41,20 @@ export function useDarkMode() {
     savePreference(String(dark));
   }, [dark]);
 
+  // Follow OS preference changes only when user hasn't set an explicit preference
+  useEffect(() => {
+    let mq: MediaQueryList;
+    try {
+      mq = window.matchMedia('(prefers-color-scheme: dark)');
+    } catch {
+      return;
+    }
+    const handler = (e: MediaQueryListEvent) => {
+      if (storedPreference() === null) setDark(e.matches);
+    };
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   return { dark, toggle: () => setDark((d) => !d) };
 }
