@@ -67,6 +67,7 @@ export function PlanCard({ plan, amount, isBest }: Props) {
         <div className="flex justify-between items-center">
           <span className="text-gray-900 font-medium">Net Profit</span>
           <span
+            data-testid="net-profit"
             className={`font-bold text-lg ${netProfit >= 0 ? 'text-green-600' : 'text-red-500'}`}
           >
             {formatEuro(netProfit)}

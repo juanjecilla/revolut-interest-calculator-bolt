@@ -43,8 +43,10 @@ test.describe('Revolut Interest Calculator', () => {
     const input = page.getByRole('spinbutton');
     await input.fill('100');
     const plusCard = page.locator('[data-plan="Plus"]');
-    // Plus has monthly fee but low interest — net profit is negative at €100
-    await expect(plusCard.locator('.text-red-600, [class*="text-red"]').first()).toBeVisible();
+    // Plus charges €3.99/month; at €100 invested gross interest (~€1.25) < annual fee (~€47.88)
+    const netProfitEl = plusCard.locator('[data-testid="net-profit"]');
+    await expect(netProfitEl).toBeVisible();
+    await expect(netProfitEl).toContainText('-');
   });
 
   test('input amount defaults to 10000', async ({ page }) => {
