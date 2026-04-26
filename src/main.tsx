@@ -5,7 +5,7 @@ import { initSentry } from './lib/sentry';
 import App from './App.tsx';
 import './index.css';
 
-initSentry();
+void initSentry();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

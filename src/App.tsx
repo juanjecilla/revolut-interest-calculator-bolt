@@ -106,7 +106,7 @@ function App() {
               href={KOFI_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 bg-[#FF5E5B] text-white font-semibold rounded-full hover:bg-[#e54e4b] transition-colors duration-200 shadow-md hover:shadow-lg"
+              className="inline-flex items-center px-6 py-3 bg-[#C53232] text-white font-semibold rounded-full hover:bg-[#A82B2B] transition-colors duration-200 shadow-md hover:shadow-lg"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.033 11.596c.049 4.271 3.468 4.669 3.468 4.669s11.723.083 15.628.083c3.905 0 4.371-2.773 4.371-2.773s.729-4.751.373-9.78z" />

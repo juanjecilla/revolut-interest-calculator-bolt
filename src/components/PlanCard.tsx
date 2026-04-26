@@ -23,7 +23,7 @@ export function PlanCard({ plan, amount, isBest }: Props) {
     >
       {isBest && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-          <div className="bg-[#0075EB] text-white px-4 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">
+          <div className="bg-[#0066CC] text-white px-4 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">
             Best Choice
           </div>
         </div>

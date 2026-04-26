@@ -14,7 +14,9 @@
         "categories:seo": ["warn", { "minScore": 0.9 }],
         "first-contentful-paint": ["warn", { "maxNumericValue": 2000 }],
         "total-blocking-time": ["warn", { "maxNumericValue": 300 }],
-        "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }]
+        "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }],
+        "network-dependency-tree-insight": ["warn", { "minScore": 0 }],
+        "unused-javascript": ["warn", { "maxLength": 2 }]
       }
     },
     "upload": {
