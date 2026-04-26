@@ -12,7 +12,7 @@ export function initSentry(): void {
     environment: 'production',
     tracesSampleRate: 0.1,
     release: import.meta.env.VITE_APP_VERSION,
-    allowUrls: [/juanjecilla\.github\.io/],
+    allowUrls: [/^https?:\/\/juanjecilla\.github\.io(?::\d+)?(?:\/|$)/],
     ignoreErrors: ['ResizeObserver loop limit exceeded', 'Non-Error promise rejection captured'],
     beforeSend(event) {
       if (event.user) {
