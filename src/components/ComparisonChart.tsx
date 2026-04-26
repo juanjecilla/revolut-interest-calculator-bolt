@@ -244,6 +244,7 @@ export function ComparisonChart({ amount, dark = false }: Props) {
             return (
               <path
                 key={plan.name}
+                data-plan={plan.name}
                 d={pathData}
                 fill="none"
                 stroke={CHART_COLORS[planIndex]}

@@ -65,7 +65,7 @@ export function PlanCard({ plan, amount, isBest }: Props) {
 
         <div className="flex justify-between items-center">
           <span className="text-sm text-gray-500 dark:text-gray-400">Gross Earnings</span>
-          <span className="text-sm font-semibold text-emerald-600 dark:text-green-400">
+          <span className="text-sm font-semibold text-emerald-700 dark:text-green-400">
             {formatEuro(grossEarnings)}
           </span>
         </div>
@@ -73,7 +73,7 @@ export function PlanCard({ plan, amount, isBest }: Props) {
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium text-gray-800 dark:text-gray-100">Net Profit</span>
           <span
-            className={`font-bold text-lg ${netProfit >= 0 ? 'text-emerald-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}
+            className={`font-bold text-lg ${netProfit >= 0 ? 'text-emerald-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}
           >
             {formatEuro(netProfit)}
           </span>

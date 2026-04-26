@@ -20,7 +20,7 @@ test.describe('Revolut Interest Calculator', () => {
   });
 
   test('SVG chart renders path elements for all 5 plans', async ({ page }) => {
-    const paths = page.locator('svg path[aria-label]');
+    const paths = page.locator('svg path[data-plan]');
     await expect(paths).toHaveCount(5);
   });
 

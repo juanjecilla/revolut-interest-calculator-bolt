@@ -47,7 +47,7 @@ function App() {
             href={REVOLUT_PRICING_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[#0075EB] text-sm font-medium hover:underline"
+            className="inline-flex items-center gap-1.5 text-[#0066CC] dark:text-blue-400 text-sm font-medium hover:underline"
           >
             View official Revolut pricing
             <ExternalLink className="w-3.5 h-3.5" />
