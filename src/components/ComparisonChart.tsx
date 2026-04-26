@@ -244,6 +244,7 @@ export function ComparisonChart({ amount, dark = false }: Props) {
             return (
               <path
                 key={plan.name}
+                data-plan={plan.name}
                 d={pathData}
                 fill="none"
                 stroke={CHART_COLORS[planIndex]}
@@ -255,7 +256,6 @@ export function ComparisonChart({ amount, dark = false }: Props) {
                 }
                 strokeLinejoin="round"
                 strokeLinecap="round"
-                aria-label={`${plan.name} plan net profit line`}
               />
             );
           })}
@@ -280,7 +280,6 @@ export function ComparisonChart({ amount, dark = false }: Props) {
             stroke="#FF4B4B"
             strokeWidth="1.5"
             strokeDasharray="5,4"
-            aria-label="Current investment amount indicator"
           />
           <circle
             cx={getX(amount)}
@@ -346,7 +345,7 @@ export function ComparisonChart({ amount, dark = false }: Props) {
         )}
       </div>
 
-      <div className="mt-4 p-3 bg-slate-50 dark:bg-gray-700 rounded-xl text-sm text-gray-500 dark:text-gray-400">
+      <div className="mt-4 p-3 bg-slate-50 dark:bg-gray-700 rounded-xl text-sm text-gray-500 dark:text-gray-300">
         The red dashed line marks your current investment amount. The dot shows the best plan&apos;s
         net profit at that level. Hover to explore exact values.
       </div>

@@ -4,6 +4,8 @@ Find the optimal Revolut subscription plan based on your savings balance.
 
 **Live:** https://juanjecilla.github.io/revolut-interest-calculator-bolt/
 
+[![codecov](https://codecov.io/gh/juanjecilla/revolut-interest-calculator-bolt/graph/badge.svg)](https://codecov.io/gh/juanjecilla/revolut-interest-calculator-bolt)
+
 ## Features
 
 - Compare all 5 Revolut plans: Standard, Plus, Premium, Metal, Ultra
