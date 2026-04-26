@@ -75,6 +75,70 @@ If the repository is renamed:
 
 ---
 
+## 7. Set Up Sentry Error Tracking
+
+Required for error monitoring in production. The build succeeds without this secret, but Sentry will be silently disabled.
+
+1. Go to [sentry.io](https://sentry.io) → sign up with GitHub
+2. Create a new project → select **React** platform
+3. Copy the **DSN** from the project settings (format: `https://xxx@oYYY.ingest.sentry.io/ZZZ`)
+4. In the GitHub repo → **Settings → Secrets and variables → Actions → New repository secret**:
+   - Name: `VITE_SENTRY_DSN`
+   - Value: your DSN string
+5. In Sentry → **Alerts** → create an alert rule:
+   - Condition: first occurrence of a new issue
+   - Action: send email notification
+6. Trigger a test deploy and verify: open DevTools → Network → filter `ingest.sentry.io`
+
+> See `docs/MONITORING.md` for full Sentry configuration details and verification steps.
+
+---
+
+## 8. Set Up Codecov Coverage Reporting
+
+Required for PR coverage diff comments. CI uploads coverage but comments only appear after Codecov is connected.
+
+1. Go to [codecov.io](https://codecov.io) → **Sign in with GitHub**
+2. Click **Add repository** → select `revolut-interest-calculator-bolt`
+3. No token is needed for public repos — the GitHub App handles authentication
+4. Push any commit to trigger the first coverage upload
+5. Add the coverage badge to `README.md`:
+
+```markdown
+[![codecov](https://codecov.io/gh/juanjecilla/revolut-interest-calculator-bolt/graph/badge.svg)](https://codecov.io/gh/juanjecilla/revolut-interest-calculator-bolt)
+```
+
+---
+
+## 9. Set Up Freshping Uptime Monitoring
+
+External uptime monitoring. No code changes required.
+
+1. Go to [freshping.io](https://freshping.io) → sign up (GitHub or email)
+2. Create a new check:
+   - **URL:** `https://juanjecilla.github.io/revolut-interest-calculator-bolt/`
+   - **Type:** HTTP(S)
+   - **Interval:** 1 minute
+   - **Alert conditions:** non-200 status, SSL certificate expiry < 30 days
+   - **Notification:** email to your address
+3. Verify the monitor shows green in the Freshping dashboard
+4. Optional: create a public status page
+
+---
+
+## 10. Update Branch Protection Rules (post-integrations)
+
+After adding CodeQL and Lighthouse CI, add their checks to branch protection:
+
+1. Go to **Settings → Branches** → edit the rule for `main`
+2. Under **Require status checks to pass**, add:
+   - `Type-check / Lint / Format / Test / Build`
+   - `CodeQL / Analyze (javascript-typescript)`
+   - `Lighthouse / Lighthouse`
+3. Save changes
+
+---
+
 ## 6. (Optional) Configure GitHub Environment Protection
 
 To add manual approval before production deployments:

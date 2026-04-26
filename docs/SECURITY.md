@@ -20,7 +20,7 @@ This is a client-side static SPA with no backend, no auth, no user accounts, and
 | `base-uri: 'self'`                | ✅ Set            | Prevents `<base>` tag injection                                                    |
 | `object-src: 'none'`              | ✅ Set            | No Flash/plugins                                                                   |
 | `form-action: 'none'`             | ✅ Set            | No form submissions                                                                |
-| `connect-src: 'none'`             | ✅ Set            | No XHR/fetch/WebSocket to external origins                                         |
+| `connect-src`                     | ✅ Set            | Allows `'self'` + `https://ingest.sentry.io` (Sentry error reporting only)         |
 
 ### CSP Limitations on GitHub Pages
 
@@ -65,6 +65,34 @@ uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
 ```
 
 All workflows run on `ubuntu-latest` with `npm ci` (exact lockfile install). No secrets are used in CI beyond the standard `GITHUB_TOKEN` for Pages deployment.
+
+## Automated Security Scanning
+
+### Dependabot — Dependency Updates & Security Alerts
+
+Configured in `.github/dependabot.yml`. Runs weekly (Monday 09:00 Europe/Madrid):
+
+- Opens PRs for minor/patch npm dependency updates (dev deps grouped into one PR)
+- Opens PRs for GitHub Actions major version updates
+- GitHub automatically enables Dependabot **security alerts** for public repos — high/critical advisories trigger notifications immediately, not just on the weekly schedule
+
+To verify: Settings → Security → Dependabot alerts.
+
+### GitHub CodeQL — Static Security Analysis
+
+Configured in `.github/workflows/codeql.yml`. Runs on:
+
+- Every push to `main`
+- Every pull request
+- Weekly (Sunday 02:00 UTC) — catches new vulnerability rules against unchanged code
+
+Uses the `security-extended` query suite for TypeScript/JavaScript. Results appear in Security → Code scanning alerts. PRs receive inline annotations when new issues are introduced.
+
+### npm audit in CI
+
+`ci.yml` runs `npm audit --audit-level=high` on every push and PR. Fails CI if any high or critical vulnerability exists in the dependency tree. The two known dev-only moderate vulnerabilities (see table below) are below the `high` threshold and do not block CI.
+
+---
 
 ## Reporting a Vulnerability
 
