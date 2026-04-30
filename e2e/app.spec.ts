@@ -44,7 +44,7 @@ test.describe('Revolut Interest Calculator', () => {
     await input.fill('100');
     const plusCard = page.locator('[data-plan="Plus"]');
     // Plus has monthly fee but low interest — net profit is negative at €100
-    await expect(plusCard.locator('.text-red-600, [class*="text-red"]').first()).toBeVisible();
+    await expect(plusCard.locator('[data-negative="true"]')).toBeVisible();
   });
 
   test('input amount defaults to 10000', async ({ page }) => {

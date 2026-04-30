@@ -97,6 +97,7 @@ export function PlanCard({ plan, amount, isBest }: Props) {
           </span>
           <span
             className="font-bold text-lg"
+            data-negative={netProfit < 0 ? 'true' : undefined}
             style={{ color: netProfit >= 0 ? 'var(--positive)' : 'var(--negative)' }}
           >
             {formatEuro(netProfit)}
