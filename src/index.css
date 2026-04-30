@@ -1,3 +1,111 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ─── Design Tokens ───────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --brand-ink:        #0066FF;
+  --brand-ink-press:  #0052CC;
+  --brand-ink-soft:   #E5F0FF;
+  --brand-accent:     #1FCFA0;
+  --brand-accent-2:   #FF5C5C;
+  --brand-violet:     #6E5CFF;
+  --brand-amber:      #FFB547;
+
+  /* Surfaces (light) */
+  --bg-canvas:        #F5F6F8;
+  --bg-surface:       #FFFFFF;
+  --bg-surface-2:     #F0F2F5;
+  --bg-inset:         #FAFBFC;
+  --line:             #E4E7EB;
+  --line-strong:      #C9CFD6;
+
+  /* Text — AAA against white/#F5F6F8 */
+  --text-1:           #0A0E14;
+  --text-2:           #2B313A;
+  --text-3:           #555C66;
+  --text-disabled:    #8A8F96;
+
+  /* Status */
+  --positive:         #0F8A5F;
+  --negative:         #B3261E;
+
+  /* Radii */
+  --radius-xs:   6px;
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-pill: 999px;
+
+  /* Density */
+  --pad-card:   28px;
+  --pad-row:    16px;
+  --gap-stack:  20px;
+
+  /* Typography */
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:    ui-monospace, Menlo, monospace;
+
+  /* Elevation */
+  --shadow-1: 0 1px 2px rgba(10,14,20,0.04), 0 2px 6px rgba(10,14,20,0.04);
+  --shadow-2: 0 4px 12px rgba(10,14,20,0.06), 0 12px 32px rgba(10,14,20,0.06);
+  --shadow-3: 0 8px 24px rgba(10,14,20,0.08), 0 24px 64px rgba(10,14,20,0.10);
+
+  /* Motion */
+  --ease: cubic-bezier(.2,.7,.2,1);
+  --dur:  220ms;
+}
+
+/* Dark mode tokens — applied via .dark class on <html> */
+.dark {
+  --bg-canvas:        #0A0E14;
+  --bg-surface:       #131820;
+  --bg-surface-2:     #1A2029;
+  --bg-inset:         #0E131A;
+  --line:             #232A35;
+  --line-strong:      #2E3744;
+
+  --text-1:           #F4F6FA;
+  --text-2:           #C7CDD6;
+  --text-3:           #9BA3AE;
+  --text-disabled:    #5C6470;
+
+  --brand-ink-soft:   #0F2240;
+  --positive:         #3DDC97;
+  --negative:         #FF6B5B;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.4);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.5), 0 12px 32px rgba(0,0,0,0.5);
+  --shadow-3: 0 8px 24px rgba(0,0,0,0.6), 0 24px 64px rgba(0,0,0,0.6);
+}
+
+/* ─── Global base ───────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+/* AAA focus ring */
+:focus-visible {
+  outline: 3px solid var(--brand-ink);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Tabular numerics helper */
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Visually hidden */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}

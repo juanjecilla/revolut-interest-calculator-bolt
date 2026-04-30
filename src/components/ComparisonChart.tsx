@@ -23,10 +23,10 @@ interface TooltipData {
   svgX: number;
 }
 
-const AXIS_COLOR_LIGHT = '#374151';
-const AXIS_COLOR_DARK = '#9ca3af';
-const GRID_COLOR_LIGHT = '#F1F5F9';
-const GRID_COLOR_DARK = '#1f2937';
+const AXIS_COLOR_LIGHT = 'var(--text-3)';
+const AXIS_COLOR_DARK = 'var(--text-3)';
+const GRID_COLOR_LIGHT = 'var(--line)';
+const GRID_COLOR_DARK = 'var(--line)';
 
 interface Props {
   amount: number;
@@ -111,9 +111,20 @@ export function ComparisonChart({ amount, dark = false }: Props) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 transition-colors duration-300">
-      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-        <TrendingUp className="w-5 h-5 text-[#0075EB]" />
+    <div
+      className="p-6 transition-colors duration-300"
+      style={{
+        background: 'var(--bg-surface)',
+        border: '1.5px solid var(--line)',
+        borderRadius: 'var(--radius-lg)',
+        boxShadow: 'var(--shadow-2)',
+      }}
+    >
+      <h3
+        className="text-xl font-bold mb-3 flex items-center gap-2"
+        style={{ color: 'var(--text-1)' }}
+      >
+        <TrendingUp className="w-5 h-5" style={{ color: 'var(--brand-ink)' }} />
         Plan Comparison Chart
       </h3>
 
@@ -134,7 +145,7 @@ export function ComparisonChart({ amount, dark = false }: Props) {
                 strokeLinecap="round"
               />
             </svg>
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+            <span className="text-xs font-medium" style={{ color: 'var(--text-3)' }}>
               {plan.name}
             </span>
           </div>
@@ -151,7 +162,9 @@ export function ComparisonChart({ amount, dark = false }: Props) {
               strokeDasharray="4,3"
             />
           </svg>
-          <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Your amount</span>
+          <span className="text-xs font-medium" style={{ color: 'var(--text-3)' }}>
+            Your amount
+          </span>
         </div>
       </div>
 
@@ -315,14 +328,21 @@ export function ComparisonChart({ amount, dark = false }: Props) {
 
         {tooltip && (
           <div
-            className="pointer-events-none absolute top-2 z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl p-3 w-52 text-xs"
+            className="pointer-events-none absolute top-2 z-10 rounded-xl p-3 w-52 text-xs"
             style={{
               left: tooltipOnRight ? undefined : `calc(${tooltipLeftPct}% + 8px)`,
               right: tooltipOnRight ? `calc(${100 - tooltipLeftPct}% + 8px)` : undefined,
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--line)',
+              boxShadow: 'var(--shadow-2)',
+              color: 'var(--text-1)',
             }}
             aria-live="polite"
           >
-            <p className="font-semibold text-gray-700 dark:text-gray-200 mb-2 border-b dark:border-gray-700 pb-1">
+            <p
+              className="font-semibold mb-2 pb-1"
+              style={{ borderBottom: '1px solid var(--line)', color: 'var(--text-1)' }}
+            >
               €{Math.round(tooltip.amount).toLocaleString()}
             </p>
             {PLANS.map((plan, i) => (
@@ -332,10 +352,11 @@ export function ComparisonChart({ amount, dark = false }: Props) {
                     className="inline-block w-2.5 h-0.5"
                     style={{ background: CHART_COLORS[i] }}
                   />
-                  <span className="text-gray-600 dark:text-gray-400">{plan.name}</span>
+                  <span style={{ color: 'var(--text-3)' }}>{plan.name}</span>
                 </span>
                 <span
-                  className={`font-semibold ${tooltip.profits[i] >= 0 ? 'text-green-600' : 'text-red-500'}`}
+                  className="font-semibold"
+                  style={{ color: tooltip.profits[i] >= 0 ? 'var(--positive)' : 'var(--negative)' }}
                 >
                   {formatEuro(tooltip.profits[i])}
                 </span>
@@ -345,7 +366,10 @@ export function ComparisonChart({ amount, dark = false }: Props) {
         )}
       </div>
 
-      <div className="mt-4 p-3 bg-slate-50 dark:bg-gray-700 rounded-xl text-sm text-gray-500 dark:text-gray-300">
+      <div
+        className="mt-4 p-3 rounded-xl text-sm"
+        style={{ background: 'var(--bg-surface-2)', color: 'var(--text-3)' }}
+      >
         The red dashed line marks your current investment amount. The dot shows the best plan&apos;s
         net profit at that level. Hover to explore exact values.
       </div>
