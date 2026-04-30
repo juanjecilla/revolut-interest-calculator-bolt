@@ -15,15 +15,24 @@ export function PlanCard({ plan, amount, isBest }: Props) {
   return (
     <div
       data-plan={plan.name}
-      className={`relative p-6 rounded-2xl transition-all duration-300 transform hover:scale-105 border ${
-        isBest
-          ? 'bg-white dark:bg-gray-800 border-[#0075EB] ring-2 ring-[#0075EB]/20 shadow-xl shadow-[#0075EB]/10'
-          : 'bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 shadow-md hover:shadow-lg'
-      }`}
+      className="relative p-6 transition-all duration-300 transform hover:scale-105"
+      style={{
+        background: 'var(--bg-surface)',
+        border: isBest ? '2px solid var(--brand-ink)' : '1.5px solid var(--line)',
+        borderRadius: 'var(--radius-lg)',
+        boxShadow: isBest ? '0 0 0 4px var(--brand-ink-soft), var(--shadow-2)' : 'var(--shadow-1)',
+      }}
     >
       {isBest && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-          <div className="bg-[#0066CC] text-white px-4 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">
+          <div
+            className="px-4 py-1 text-xs font-semibold tracking-wide uppercase"
+            style={{
+              background: 'var(--brand-ink)',
+              color: '#fff',
+              borderRadius: 'var(--radius-pill)',
+            }}
+          >
             Best Choice
           </div>
         </div>
@@ -34,46 +43,62 @@ export function PlanCard({ plan, amount, isBest }: Props) {
           {plan.icon}
         </div>
         <div>
-          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{plan.name}</h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">{plan.description}</p>
+          <h3 className="text-lg font-bold" style={{ color: 'var(--text-1)' }}>
+            {plan.name}
+          </h3>
+          <p className="text-xs" style={{ color: 'var(--text-3)' }}>
+            {plan.description}
+          </p>
         </div>
       </div>
 
       <div className="space-y-2.5">
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-500 dark:text-gray-400">Monthly Fee</span>
-          <span className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+          <span className="text-sm" style={{ color: 'var(--text-3)' }}>
+            Monthly Fee
+          </span>
+          <span className="text-sm font-semibold" style={{ color: 'var(--text-1)' }}>
             {plan.monthlyFee === 0 ? 'Free' : formatEuro(plan.monthlyFee)}
           </span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-500 dark:text-gray-400">Interest Rate</span>
-          <span className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+          <span className="text-sm" style={{ color: 'var(--text-3)' }}>
+            Interest Rate
+          </span>
+          <span className="text-sm font-semibold" style={{ color: 'var(--text-1)' }}>
             {plan.interestRate}%
           </span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-500 dark:text-gray-400">Annual Fee</span>
-          <span className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+          <span className="text-sm" style={{ color: 'var(--text-3)' }}>
+            Annual Fee
+          </span>
+          <span className="text-sm font-semibold" style={{ color: 'var(--text-1)' }}>
             {annualFee === 0 ? 'Free' : formatEuro(annualFee)}
           </span>
         </div>
 
-        <hr className="border-gray-100 dark:border-gray-700" />
+        <hr style={{ borderColor: 'var(--line)' }} />
 
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-500 dark:text-gray-400">Gross Earnings</span>
-          <span className="text-sm font-semibold text-emerald-700 dark:text-green-400">
+          <span className="text-sm" style={{ color: 'var(--text-3)' }}>
+            Gross Earnings
+          </span>
+          <span className="text-sm font-semibold" style={{ color: 'var(--positive)' }}>
             {formatEuro(grossEarnings)}
           </span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-sm font-medium text-gray-800 dark:text-gray-100">Net Profit</span>
+          <span className="text-sm font-medium" style={{ color: 'var(--text-2)' }}>
+            Net Profit
+          </span>
           <span
-            className={`font-bold text-lg ${netProfit >= 0 ? 'text-emerald-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}
+            className="font-bold text-lg"
+            data-negative={netProfit < 0 ? 'true' : undefined}
+            style={{ color: netProfit >= 0 ? 'var(--positive)' : 'var(--negative)' }}
           >
             {formatEuro(netProfit)}
           </span>

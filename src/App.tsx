@@ -24,11 +24,26 @@ function App() {
   const bestPlan = useMemo(() => findBestPlan(amount, PLANS), [amount]);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950">
-      <header className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+    <div
+      className={dark ? 'dark' : ''}
+      style={{ minHeight: '100vh', background: 'var(--bg-canvas)', color: 'var(--text-1)' }}
+    >
+      <header
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+          background: 'var(--bg-surface)',
+          borderBottom: '1px solid var(--line)',
+          boxShadow: 'var(--shadow-1)',
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center gap-2.5">
-          <Calculator className="w-5 h-5 text-[#0075EB]" />
-          <span className="font-bold text-base text-gray-900 dark:text-gray-100 tracking-tight flex-1">
+          <Calculator className="w-5 h-5" style={{ color: 'var(--brand-ink)' }} />
+          <span
+            className="font-bold text-base tracking-tight flex-1"
+            style={{ color: 'var(--text-1)' }}
+          >
             Revolut Calculator
           </span>
           <DarkModeToggle dark={dark} onToggle={toggle} />
@@ -37,17 +52,21 @@ function App() {
 
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-3">
-            Revolut Subscription <span className="text-[#0075EB]">Calculator</span>
+          <h1
+            className="text-4xl font-extrabold tracking-tight mb-3"
+            style={{ color: 'var(--text-1)' }}
+          >
+            Revolut Subscription <span style={{ color: 'var(--brand-ink)' }}>Calculator</span>
           </h1>
-          <p className="text-lg text-gray-500 dark:text-gray-400 max-w-xl mx-auto mb-4">
+          <p className="text-lg max-w-xl mx-auto mb-4" style={{ color: 'var(--text-3)' }}>
             Find the optimal Revolut plan for your savings and maximize your net returns.
           </p>
           <a
             href={REVOLUT_PRICING_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[#0066CC] dark:text-blue-400 text-sm font-medium hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
+            style={{ color: 'var(--brand-ink)' }}
           >
             View official Revolut pricing
             <ExternalLink className="w-3.5 h-3.5" />
@@ -57,12 +76,23 @@ function App() {
         <div className="max-w-sm mx-auto mb-10">
           <label
             htmlFor="amount"
-            className="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2"
+            className="block text-sm font-semibold mb-2"
+            style={{ color: 'var(--text-2)' }}
           >
             Investment Amount
           </label>
-          <div className="flex items-center rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus-within:border-[#0075EB] transition-colors duration-200">
-            <span className="pl-4 text-xl font-bold text-gray-400 dark:text-gray-500 select-none">
+          <div
+            className="flex items-center rounded-xl border-2 transition-colors duration-200"
+            style={{
+              borderColor: 'var(--line)',
+              background: 'var(--bg-surface)',
+            }}
+            onFocus={(e) =>
+              ((e.currentTarget as HTMLDivElement).style.borderColor = 'var(--brand-ink)')
+            }
+            onBlur={(e) => ((e.currentTarget as HTMLDivElement).style.borderColor = 'var(--line)')}
+          >
+            <span className="pl-4 text-xl font-bold select-none" style={{ color: 'var(--text-3)' }}>
               €
             </span>
             <input
@@ -72,7 +102,8 @@ function App() {
               onChange={(e) => setRawAmount(e.target.value)}
               min="0"
               step="100"
-              className="flex-1 px-3 py-4 text-2xl font-bold bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder-gray-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="flex-1 px-3 py-4 text-2xl font-bold bg-transparent outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              style={{ color: 'var(--text-1)' }}
               placeholder="10000"
             />
           </div>
@@ -100,13 +131,14 @@ function App() {
           <ComparisonChart amount={amount} dark={dark} />
         </div>
 
-        <div className="text-center text-gray-500 dark:text-gray-400 text-sm space-y-4">
+        <div className="text-center text-sm space-y-4" style={{ color: 'var(--text-3)' }}>
           <div className="flex justify-center">
             <a
               href={KOFI_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 bg-[#C53232] text-white font-semibold rounded-full hover:bg-[#A82B2B] transition-colors duration-200 shadow-md hover:shadow-lg"
+              className="inline-flex items-center px-6 py-3 font-semibold rounded-full transition-colors duration-200 shadow-md hover:shadow-lg"
+              style={{ background: '#C53232', color: '#fff' }}
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.033 11.596c.049 4.271 3.468 4.669 3.468 4.669s11.723.083 15.628.083c3.905 0 4.371-2.773 4.371-2.773s.729-4.751.373-9.78z" />
