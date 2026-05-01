@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import { Calculator, ExternalLink, TrendingUp } from 'lucide-react';
 import { PLANS, KOFI_URL, REVOLUT_PRICING_URL } from '@/constants/plans';
@@ -11,7 +11,9 @@ import { BestPlanBanner } from '@/components/BestPlanBanner';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
 import { CopyLinkButton } from '@/components/CopyLinkButton';
 import { StaleRatesWarning } from '@/components/StaleRatesWarning';
-import { CompoundCalculator } from '@/pages/CompoundCalculator';
+const CompoundCalculator = lazy(() =>
+  import('@/pages/CompoundCalculator').then((m) => ({ default: m.CompoundCalculator }))
+);
 
 function CalculatorPage() {
   const { rawAmount, setRawAmount } = useHashAmount();
@@ -188,7 +190,23 @@ function AppShell() {
 
       <Routes>
         <Route path="/" element={<CalculatorPage />} />
-        <Route path="/compound" element={<CompoundCalculator dark={dark} />} />
+        <Route
+          path="/compound"
+          element={
+            <Suspense
+              fallback={
+                <div
+                  style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-3)' }}
+                  aria-busy="true"
+                >
+                  Loading…
+                </div>
+              }
+            >
+              <CompoundCalculator dark={dark} />
+            </Suspense>
+          }
+        />
       </Routes>
     </div>
   );
