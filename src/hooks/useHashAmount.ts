@@ -4,7 +4,7 @@ const DEFAULT_AMOUNT = '10000';
 
 function readHashAmount(): string {
   const hash = window.location.hash;
-  const match = hash.match(/[#&]?amount=([0-9.]+)/);
+  const match = hash.match(/[#&]?amount=(\d+(?:\.\d+)?)/);
   if (match) {
     const value = parseFloat(match[1]);
     if (!isNaN(value) && value >= 0) return match[1];
