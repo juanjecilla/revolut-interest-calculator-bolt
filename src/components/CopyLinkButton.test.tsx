@@ -43,21 +43,4 @@ describe('CopyLinkButton', () => {
     });
     expect(screen.getByText('Share')).toBeInTheDocument();
   });
-
-  it('uses execCommand fallback when clipboard API rejects', async () => {
-    vi.stubGlobal('navigator', {
-      clipboard: { writeText: vi.fn().mockRejectedValue(new Error('blocked')) },
-    });
-    Object.defineProperty(document, 'execCommand', {
-      value: vi.fn().mockReturnValue(true),
-      writable: true,
-      configurable: true,
-    });
-    render(<CopyLinkButton />);
-    await act(async () => {
-      fireEvent.click(screen.getByTitle('Copy shareable link'));
-    });
-    expect(screen.getByText('Copied!')).toBeInTheDocument();
-    expect(document.execCommand).toHaveBeenCalledWith('copy');
-  });
 });

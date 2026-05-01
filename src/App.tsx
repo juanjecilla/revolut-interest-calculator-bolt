@@ -24,7 +24,7 @@ function CalculatorPage() {
   const bestPlan = useMemo(() => findBestPlan(amount, PLANS), [amount]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
+    <main className="max-w-7xl mx-auto px-4 py-10">
       <div className="text-center mb-10">
         <h1
           className="text-4xl font-extrabold tracking-tight mb-3"
@@ -110,7 +110,12 @@ function CalculatorPage() {
             className="inline-flex items-center px-6 py-3 font-semibold rounded-full transition-colors duration-200 shadow-md hover:shadow-lg"
             style={{ background: '#C53232', color: '#fff' }}
           >
-            <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+            <svg
+              className="w-5 h-5 mr-2"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
               <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.033 11.596c.049 4.271 3.468 4.669 3.468 4.669s11.723.083 15.628.083c3.905 0 4.371-2.773 4.371-2.773s.729-4.751.373-9.78z" />
             </svg>
             Support this project on Ko-fi
@@ -121,7 +126,7 @@ function CalculatorPage() {
           directly.
         </p>
       </div>
-    </div>
+    </main>
   );
 }
 
