@@ -48,8 +48,8 @@ export function CompoundCalculator({ dark }: Props) {
       {/* Hero strip */}
       <section
         style={{
-          background: 'var(--text-1)',
-          color: 'var(--bg-surface)',
+          background: 'var(--bg-hero)',
+          color: '#fff',
           borderRadius: 'var(--radius-xl)',
           padding: '40px 44px',
           position: 'relative',
