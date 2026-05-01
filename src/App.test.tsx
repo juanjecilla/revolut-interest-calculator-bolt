@@ -52,4 +52,10 @@ describe('App', () => {
     const link = screen.getByRole('link', { name: /Support this project on Ko-fi/i });
     expect(link).toHaveAttribute('href', 'https://ko-fi.com/juanjecilla');
   });
+
+  it('navigates to compound calculator and renders it', async () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole('link', { name: /Compound/i }));
+    expect(await screen.findByText('Growth over time')).toBeInTheDocument();
+  });
 });
