@@ -18,6 +18,11 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    environmentOptions: {
+      jsdom: {
+        url: 'http://localhost/revolut-interest-calculator-bolt/',
+      },
+    },
     exclude: ['node_modules', 'dist', 'e2e/**'],
     coverage: {
       provider: 'v8',

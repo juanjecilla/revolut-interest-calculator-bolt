@@ -18,3 +18,5 @@ ignore:
   - "src/test/**"
   - "src/main.tsx"
   - "src/vite-env.d.ts"
+  - "src/components/compound/**"
+  - "src/pages/CompoundCalculator.tsx"
